@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import axiosWithAuth from '../utils/axiosWithAuth';
-import fetchColors from '../api/fetchColors'
+import { fetchColors } from '../api/fetchColors'
 
 import Bubbles from "./Bubbles";
 import ColorList from "./ColorList";
