@@ -29,8 +29,17 @@ const ColorList = ({ colors, updateColors }) => {
       .then((res) => {
         console.log('save color res: ', res)
         console.log('save color event: ', e)
-        console.log('all colors: ', colors)
         setEditing(false)
+        const newEditColors = colors.map(color => {
+          if(color.id === res.id){
+            return res
+          }
+          else{
+            return color
+          }
+        });
+        updateColors(newEditColors)
+        console.log('all colors: ', colors);
       })
       .catch((err) => {
         console.log('color to edit error: ', err)
@@ -40,6 +49,16 @@ const ColorList = ({ colors, updateColors }) => {
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    console.log('color to be deleted: ', color)
+    axiosWithAuth()
+      .delete(`/colors/${color.id}`)
+      .then((res) => {
+        console.log('delete color res: ', res);
+        const newColors = colors.filter( color => 
+          color.id != res.data);
+        updateColors(newColors);
+      })
+
   };
 
   return (
