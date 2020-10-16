@@ -1,4 +1,5 @@
 import React from "react";
+import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -9,11 +10,13 @@ const Login = () => {
 
   const credentials = { username: 'Lambda School', password: 'i<3Lambd4'}
 
+  const { push } = useHistory();
+
   axios.post('http://localhost:5000/api/login', credentials)
     .then((res) => {
       console.log('login res: ', res)
       window.localStorage.setItem("token", res.data.payload);
-      this.props.history.push("/protected");
+      push("/protected");
     })
     .catch((err) => {
       console.log('Login error: ', err)
