@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const axiosWithAuth = () => {
+const axiosWithAuth = () => {
   const token = window.localStorage.getItem("token");
 
   return axios.create({
@@ -10,3 +10,6 @@ export const axiosWithAuth = () => {
     baseURL: "http://localhost:5000/api"
   });
 };
+
+
+export default axiosWithAuth;
