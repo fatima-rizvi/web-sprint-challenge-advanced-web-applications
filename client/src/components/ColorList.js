@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import axiosWithAuth from '../utils/axiosWithAuth';
+import AddColorForm from './AddColorForm';
 
 const initialColor = {
   color: "",
@@ -7,7 +9,7 @@ const initialColor = {
 };
 
 const ColorList = ({ colors, updateColors }) => {
-  console.log(colors);
+  //console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -21,10 +23,43 @@ const ColorList = ({ colors, updateColors }) => {
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    // bada bing and a bada boom
+    console.log('color to edit: ', colorToEdit)
+    axiosWithAuth()
+      .put(`/colors/${colorToEdit.id}`, colorToEdit)
+      .then((res) => {
+        console.log('save color res: ', res)
+        console.log('save color event: ', e)
+        setEditing(false)
+        const newEditColors = colors.map(color => {
+          if(color.id === res.id){
+            return res
+          }
+          else{
+            return color
+          }
+        });
+        updateColors(newEditColors)
+        console.log('all colors: ', colors);
+      })
+      .catch((err) => {
+        console.log('color to edit error: ', err)
+      })
+
   };
 
   const deleteColor = color => {
     // make a delete request to delete this color
+    console.log('color to be deleted: ', color)
+    axiosWithAuth()
+      .delete(`/colors/${color.id}`)
+      .then((res) => {
+        console.log('delete color res: ', res);
+        const newColors = colors.filter( color => 
+          color.id != res.data);
+        updateColors(newColors);
+      })
+
   };
 
   return (
@@ -80,8 +115,13 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       )}
+
+      <AddColorForm colors = {colors} updateColors = {updateColors} />  
+
       <div className="spacer" />
-      {/* stretch - build another form here to add a color */}
+      
+      
+
     </div>
   );
 };
